@@ -1,0 +1,30 @@
+#!/usr/bin/env node
+
+var fs = require('fs'),
+    path = require('path'),
+    Moxi = require('../lib/moxi'),
+    server = new Moxi();
+
+process.title = 'moxi';
+
+fs.readFile(process.argv[2], {encoding: 'utf8'}, function(err, data){
+    if (err) return console.error(err);
+    try {
+        var config = JSON.parse(data);
+        server.setHttpPort(config.ports.http);
+        server.setWsPort(config.ports.comet);
+        config.roots.forEach(function(root){
+            server.addRoot(root);
+        });
+        config.middleware.http.forEach(function(mw){
+            server.addHttpMiddleware(mw.method, mw.path, path.normalize(process.cwd() + "/" + mw.factory), mw.params);
+        });
+        config.middleware.comet.subscribers.forEach(function(mw){
+            server.addWsSubscriber(mw.channel, mw.factory, mw.params);
+        });
+        server.run();
+        console.log("Server running on ports", config.ports.http, "(http)", config.ports.comet, "(ws)");
+    } catch (e) {
+        console.error(e);
+    }
+});
