@@ -22,6 +22,9 @@ fs.readFile(process.argv[2], {encoding: 'utf8'}, function(err, data){
         config.middleware.comet.subscribers.forEach(function(mw){
             server.addWsSubscriber(mw.channel, path.normalize(process.cwd() + "/" + mw.factory), mw.params);
         });
+        config.middleware.comet.publishers.forEach(function(mw){
+            server.addWsPublisher(mw.channel, path.normalize(process.cwd() + "/" + mw.factory), mw.params);
+        });
         server.run();
         console.log("Server running on ports", config.ports.http, "(http)", config.ports.comet, "(ws)");
     } catch (e) {
