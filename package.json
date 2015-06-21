@@ -12,6 +12,7 @@
   "dependencies": {
     "body-parser": "^1.10.2",
     "express": "^4.11.1",
+    "cors-anywhere": "github://jcppman/cors-anywhere#3923fb8e52f4cc966fd912cff1758990ca59e65a",
     "socket.io": "^1.3.2"
   },
   "bin": {
