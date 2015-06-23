@@ -12,6 +12,7 @@ fs.readFile(process.argv[2], {encoding: 'utf8'}, function(err, data){
     try {
         var config = JSON.parse(data);
         server.setHttpPort(config.ports.http);
+        server.setProxyPort(config.ports.proxy);
         server.setWsPort(config.ports.comet);
         config.roots.forEach(function(root){
             server.addRoot(root);
@@ -26,7 +27,10 @@ fs.readFile(process.argv[2], {encoding: 'utf8'}, function(err, data){
             server.addWsPublisher(mw.channel, path.normalize(process.cwd() + "/" + mw.factory), mw.params);
         });
         server.run();
-        console.log("Server running on ports", config.ports.http, "(http)", config.ports.comet, "(ws)");
+        var portDescribes = Object.keys(config.ports).map(function(type){
+          return config.ports[type] + "(" + type + ")";
+        });
+        console.log("Server running on ports", portDescribes.join(" "));
     } catch (e) {
         console.error(e);
     }
