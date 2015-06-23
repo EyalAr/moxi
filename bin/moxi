@@ -12,15 +12,7 @@ fs.readFile(process.argv[2], {encoding: 'utf8'}, function(err, data){
     try {
         var config = JSON.parse(data);
         server.setHttpPort(config.ports.http);
-        server.setHttpsPort(config.ports.https);
         server.setProxyPort(config.ports.proxy);
-        server.setAllowedOrigin(config.corsAllowedOrigin);
-        if(config.httpsCreds) {
-          server.setHttpsCreds({
-            key: fs.readFileSync(config.httpsCreds.key),
-            cert: fs.readFileSync(config.httpsCreds.cert)
-          });
-        }
         server.setWsPort(config.ports.comet);
         config.roots.forEach(function(root){
             server.addRoot(root);
