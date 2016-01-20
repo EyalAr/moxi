@@ -1,6 +1,6 @@
 {
   "name": "moxi",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Mock http & websocket server",
   "main": "lib/moxi.js",
   "scripts": {
